@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <title>{% block title %}{% endblock title %} - Buzz</title>
-        <div>
-            <ul class="Header">
-                <li><h1>Buzz-Buzz Matic</h1></li>
-                <li>CHANGEME - username</li>
-            </ul>
-        </div>
-    </body>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <title>{% block title %}{% endblock title %} - Buzz</title>
+    <ul class="Header">
+        <li>Buzz-Buzz Matic</li>
+        <li id="Username">CHANGEME - username</li>
+    </ul>
+
+    <div class="Content">
+        <h1 style="text-align: center;">CHANGEME - question active?</h1>
+        <button type="button" class="BuzzButton">
+            BUZZ IN
+        </button>
+    </div>
+</body>
+
 </html>

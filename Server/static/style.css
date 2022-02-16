@@ -1,7 +1,61 @@
-html{
+html {
     background-color: rgb(29, 30, 34);
     color: white;
 }
-.Header ul {
+
+
+/*Thanks to W3 Schools for inspiration for the style for the majority of Header class objects*/
+
+.Header,
+ul {
+    width: 100%;
+    background-color: rgb(63, 65, 73);
     list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    margin-top: 0;
+}
+
+.Header,
+li {
+    float: left;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.Header,
+#Username {
+    float: right;
+}
+
+.Content,
+div {
+    background-color: rgb(29, 30, 34);
+    margin-top: 10px;
+    padding: 10px;
+}
+
+
+/*Thanks to w3 schools for button style*/
+
+.BuzzButton,
+button {
+    display: block;
+    width: 100%;
+    border: none;
+    background-color: #83cc71;
+    padding: 40px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.BuzzButton:hover {
+    background-color: #6d9e60;
+}
+
+.BuzzButton:active {
+    background-color: #5d7455;
 }
