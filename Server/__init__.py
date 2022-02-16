@@ -18,7 +18,7 @@ def create_app():
 
     @buzz.route('/')
     def hello_world():
-        return render_template('base.html.jinja')
+        return render_template('base.html')
 
 
     return buzz
