@@ -18,7 +18,15 @@ def create_app():
 
     @buzz.route('/')
     def hello_world():
-        return render_template('base.html')
+        return render_template('hello_world.html')
+    
+    @buzz.route('/buzzer')
+    def buzzer():
+        return render_template('buzzer.html')
+
+    @buzz.route('/admin')
+    def admin():
+        return render_template('admin.html')
 
 
     return buzz

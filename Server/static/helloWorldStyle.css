@@ -1,0 +1,15 @@
+html {
+    background-color: rgb(29, 30, 34);
+    color: white;
+}
+#Title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: xx-large;
+    text-align: center;
+    font-weight: bolder;
+}
+
+p{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
