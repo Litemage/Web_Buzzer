@@ -7,40 +7,35 @@ html {
 
 /*Thanks to W3 Schools for inspiration for the style for the majority of Header class objects*/
 
-.Header,
-ul {
+ul.Header{
     width: 100%;
     background-color: rgb(63, 65, 73);
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
-    margin-top: 0;
+    overflow: hidden;
 }
 
-.Header,
-li {
+li.Header
+{
     float: left;
-    padding: 8px;
-    text-align: center;
-    text-decoration: none;
+    padding: 16px;
 }
 
-.Header,
-#Username {
+#Username{
     float: right;
 }
 
-
 /*Thanks to w3 schools for button style*/
 
-.BuzzButton,
-button {
+button.BuzzButton
+ {
     display: block;
     width: 100%;
+    height: 60%;
     border: none;
     background-color: #83cc71;
-    padding: 40px 28px;
+    padding: 40px 80px;
     font-size: 16px;
     cursor: pointer;
     text-align: center;
@@ -52,4 +47,33 @@ button {
 
 .BuzzButton:active {
     background-color: #5d7455;
+}
+
+.StartButton{
+    display: block;
+    border: none;
+    background-color: #83cc71;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    padding: 13px;
+}
+.StartButton:hover {
+    background-color: #6d9e60;
+}
+
+.StartButton:active {
+    background-color: #5d7455;
+}
+
+ul.question{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li.question{
+    float: left;
+    padding: 20px;
 }

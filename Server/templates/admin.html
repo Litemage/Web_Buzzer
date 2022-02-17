@@ -4,16 +4,25 @@
 
 {%block header%}
 <ul class="Header">
-    <li>Admin | Buzz-O-Matic</li>
-    <li id="Username">Admin | CHANGEME - username</li>
+    <li class="Header">Admin | Buzz-O-Matic</li>
+    <li class="Header" id="Username">Admin | CHANGEME - username</li>
 </ul>
 {%endblock%}
 
 {%block content%}
 <!--Look  up forms, and how to post back into the server-->
-<form method="POST"></form>
-<h1>Question Leader</h1>
-<ul>
-    <li><button type="button">Start Question</button></li>
+<form method="POST">
+    <label for=""></label>
+</form>
+<h1 style="text-align: center;">Question Configure</h1>
+<ul class="question">
+    <li class="question"><form method="POST">
+        <label for="qname">Question Name</label>
+        <input type="text" id="qname" name="qname"><br>
+        <label for="qtime">Question Time</label>
+        <input type="text" id="qtime" name="qtime">
+    </form></li>
+    <li class="question"><button class="StartButton">Start Question</button></li>
+    <li class="question">CHANGEME - Active/NotActive question</li>
 </ul>
 {%endblock%}
