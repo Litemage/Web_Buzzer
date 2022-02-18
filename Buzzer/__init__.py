@@ -7,7 +7,7 @@ def create_app():
     buzz = Flask(__name__, instance_relative_config=True)
     buzz.config.from_mapping(
         DEBUG = True,
-        SECRET_KEY = "Admin123",
+        SECRET_KEY = "Admin159",
         DATABASE = os.path.join(buzz.instance_path, "buzzer_system.sqlite")
     )
 
