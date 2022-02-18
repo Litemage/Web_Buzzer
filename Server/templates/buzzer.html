@@ -1,11 +1,30 @@
 {% extends "base.html" %}
 
 {%block script%}
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="crossorigin="anonymous"></script>
 <script>
-    function noClick(){
-        // todo if question active::
-        document.getElementById("buzzButton").style.backgroundColor = "rgb(227, 50, 50)";
-        document.getElementById("buzzButton").onclick = null;
+
+    window.addEventListener('load', (event) => {
+        disableClick();
+    });
+
+    var socket = io();
+
+    socket.on('question_active', function() {
+        enableClick();
+    });
+
+    socket.on('server_question_stop', function() {
+        disableClick();
+    });
+
+    function disableClick(){
+        document.getElementById("buzzButton").className = "BuzzButtonInactive";
+    }
+    function enableClick(){
+        document.getElementById("buzzButton").className = "BuzzButtonActive";
     }
 </script>
 {%endblock%}
@@ -23,7 +42,7 @@
 <div style="padding: 10px;">
     <h1 style="text-align: center; margin: 0; padding: 0;">CHANGEME - question active?</h1>
 </div>
-<button onclick="noClick()" id="buzzButton" type="button" class="BuzzButton">
+<button id="buzzButton" type="button" class="BuzzButtonInactive">
     BUZZ IN
 </button>
 {%endblock%}

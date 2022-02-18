@@ -19,17 +19,19 @@ def create_app():
     except OSError:
         pass
 
-    @socketio.on('client_connected')
+    @socketio.on('connect')
     def handle_connect(data):
         print('[DEBUG] Client has connected')
 
-    @socketio.on('disconnect')
-    def handle_disconnect():
-        print('[DEBUG] Client has disconnected')
-
     @socketio.on('queston_start')
     def handle_question_start(data):
-        print('Name: {0}, Time: {1}'.format(data['qname'], data['qtime']))
+        print('[DEBUG] Name: {0}, Time: {1}'.format(data['qname'], data['qtime']))
+        socketio.emit('question_active')
+
+    @socketio.on('question_stop')
+    def handle_question_stop():
+        print('[DEBUG] Received question stop from admin')
+        socketio.emit('server_question_stop')
     
     @buzz.route('/')
     def hello_world():

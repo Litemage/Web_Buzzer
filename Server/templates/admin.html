@@ -2,22 +2,28 @@
 
 {%block script%}
 <script
-    src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="crossorigin="anonymous"></script>
-<script
     src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
     integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
 
     var socket = io();
+
+    var question_active = false;
+
+    socket.on('question_active', function() {
+        console.log("[DEBUG] Admin - question active");
+        question_active = true;
+    });
     
-    socket.on('connect', function() {
-        socket.emit('client_connected', {data: 'Hello world'});
+    socket.on('server_question_stop', function() {
+        console.log("[DEBUG] Admin - question inactive");
+        question_active = false;
     });
 
-    socket.on('disconnect', function() {
-        socket.emit('client_disconnected', {data: 'Hello world'});
+    socket.on('question_active', function() {
+        document.getElementById("qactive").innerHTML = "Question Active";
     });
+
 
     function e_QuestionStart() {
         var qName = document.getElementById("qname").value;
@@ -49,6 +55,18 @@
         console.log({"qname":qName, "qtime":qTime});
     }
 
+    function e_QuestionStop() {
+        if (!question_active){
+            return;
+        }
+        document.getElementById("qname").value = "";
+        document.getElementById("qtime").value = ""; 
+
+        document.getElementById("qactive").innerHTML = "No Question Active";
+
+        socket.emit('question_stop');
+    }
+
 </script>
 {%endblock%}
 
@@ -72,7 +90,7 @@
         </form></li>
     <li class="question"><button id="_StartButton" class="StartButton"
             onclick="e_QuestionStart()">Start Question</button></li>
-    <li class="question"><button class="StopButton">Stop Question</button></li>
-    <li class="question">CHANGEME - Active/NotActive question</li>
+    <li class="question"><button onclick="e_QuestionStop()" class="StopButton">Stop Question</button></li>
+    <li class="question" id="qactive"></li>
 </ul>
 {%endblock%}
