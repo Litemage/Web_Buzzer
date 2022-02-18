@@ -59,11 +59,28 @@ button.BuzzButton
     padding: 13px;
 }
 .StartButton:hover {
-    background-color: #6d9e60;
+    background-color: #9fdb91;
 }
 
 .StartButton:active {
-    background-color: #5d7455;
+    background-color: #75aa68;
+}
+
+.StopButton{
+    display: block;
+    border: none;
+    background-color: #e22e2e;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    padding: 13px;
+}
+.StopButton:hover {
+    background-color: #db5252;
+}
+
+.StopButton:active {
+    background-color: #af3939;
 }
 
 ul.question{

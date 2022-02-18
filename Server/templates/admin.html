@@ -1,5 +1,57 @@
 {% extends "base.html" %}
 
+{%block script%}
+<script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="crossorigin="anonymous"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+
+    var socket = io();
+    
+    socket.on('connect', function() {
+        socket.emit('client_connected', {data: 'Hello world'});
+    });
+
+    socket.on('disconnect', function() {
+        socket.emit('client_disconnected', {data: 'Hello world'});
+    });
+
+    function e_QuestionStart() {
+        var qName = document.getElementById("qname").value;
+        var qTime = document.getElementById("qtime").value;
+
+        if (qTime > 120){
+            qTime = 120;
+        }
+
+        if (!qTime || !qName){
+            document.getElementById("qTimeLabel").style.color = "white";
+            document.getElementById("qNameLabel").style.color = "white";
+            if (!qTime){
+                document.getElementById("qTimeLabel").style.color = "red";
+            }
+            if (!qName){
+                document.getElementById("qNameLabel").style.color = "red";
+            }
+            return;
+        }
+        
+        document.getElementById("qNameLabel").style.color = "white";
+        document.getElementById("qTimeLabel").style.color = "white"
+
+        document.getElementById("qname").value = "";
+        document.getElementById("qtime").value = ""; 
+
+        socket.emit('queston_start', {"qname":qName, "qtime":qTime});
+        console.log({"qname":qName, "qtime":qTime});
+    }
+
+</script>
+{%endblock%}
+
 {%block title%}Administrator | Buzz-O-Matic{%endblock%}
 
 {%block header%}
@@ -10,19 +62,17 @@
 {%endblock%}
 
 {%block content%}
-<!--Look  up forms, and how to post back into the server-->
-<form method="POST">
-    <label for=""></label>
-</form>
 <h1 style="text-align: center;">Question Configure</h1>
 <ul class="question">
     <li class="question"><form method="POST">
-        <label for="qname">Question Name</label>
-        <input type="text" id="qname" name="qname"><br>
-        <label for="qtime">Question Time</label>
-        <input type="text" id="qtime" name="qtime">
-    </form></li>
-    <li class="question"><button class="StartButton">Start Question</button></li>
+            <label for="qname" id="qNameLabel">Question Name</label>
+            <input type="text" id="qname" name="qname"><br>
+            <label for="qtime" id="qTimeLabel">Question Time (Seconds)</label>
+            <input type="number" id="qtime" name="qtime" min="1" max="120">
+        </form></li>
+    <li class="question"><button id="_StartButton" class="StartButton"
+            onclick="e_QuestionStart()">Start Question</button></li>
+    <li class="question"><button class="StopButton">Stop Question</button></li>
     <li class="question">CHANGEME - Active/NotActive question</li>
 </ul>
 {%endblock%}
