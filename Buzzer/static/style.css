@@ -42,7 +42,7 @@ button.BuzzButtonActive
 }
 
 .BuzzButtonActive:hover {
-    background-color: #6d9e60;
+    opacity: 1;
 }
 
 .BuzzButtonActive:active {
@@ -72,7 +72,7 @@ button.BuzzButtonInactive
     padding: 13px;
 }
 .StartButton:hover {
-    background-color: #9fdb91;
+    opacity: 1;
 }
 
 .StartButton:active {
@@ -106,4 +106,56 @@ ul.question{
 li.question{
     float: left;
     padding: 20px;
+}
+
+/* Thanks to W3 schools for this hr style and the input styles*/
+
+/* Overwrite default styles of hr */
+hr {
+    border: 1px solid #868484;
+    margin-bottom: 25px;
+  }
+
+/* Add padding to containers */
+.container {
+    padding: 18px;
+  }
+  
+  /* Full-width input fields */
+  input.Register {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: block;
+    width: 100%;
+    border: none;
+    background: rgb(114, 120, 141);
+    color: white;
+  }
+  
+  input:focus.Register {
+    background-color: rgb(125, 133, 165);
+    outline: none;
+  }
+
+  /* Set a style for the submit button */
+.registerbtn {
+    background-color: rgb(84, 88, 102);
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+  
+  .registerbtn:hover {
+    opacity: 1;
+  }
+
+.stopwatch{
+    font-size: xx-large;
+    margin-top: 18px;
+    text-align: center;
 }

@@ -24,6 +24,48 @@
         document.getElementById("qactive").innerHTML = "Question Active";
     });
 
+    // Credit to the "Foolish Developer" webpage for the stopwatch logic
+
+    var [milliseconds, seconds, minutes] = [0, 0, 0];
+
+    var int = null;
+
+    function start_stopwatch() {
+        console.log(document.getElementById('Stopwatch'));
+        if (int!==null){
+            clearInterval(int);
+        }
+        int = setInterval(displayTimer, 10);
+    }
+
+    function pause_stopwatch(){
+        clearInterval(int);
+    }
+
+    function reset_stopwatch(){
+        clearInterval(int);
+        [milliseconds, seconds, minutes] = [0, 0, 0];
+        document.getElementById('Stopwatch').innerHTML = '00 : 00 : 00'
+    }
+
+    function displayTimer(){
+        milliseconds += 10;
+
+        if (milliseconds == 1000){
+            milliseconds = 0;
+            seconds++;
+            if (seconds == 60){
+                seconds = 0;
+                minutes++;
+            }
+        }
+        let m = minutes < 10 ? "0" + minutes : minutes;
+        let s = seconds < 10 ? "0" + seconds : seconds;
+        let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+
+        document.getElementById('Stopwatch').innerHTML = ` ${m} : ${s} : ${ms}`;
+    }
+
 
     function e_QuestionStart() {
         var qName = document.getElementById("qname").value;
@@ -52,6 +94,7 @@
         document.getElementById("qtime").value = ""; 
 
         socket.emit('queston_start', {"qname":qName, "qtime":qTime});
+        start_stopwatch();
         console.log({"qname":qName, "qtime":qTime});
     }
 
@@ -63,6 +106,7 @@
         document.getElementById("qtime").value = ""; 
 
         document.getElementById("qactive").innerHTML = "No Question Active";
+        reset_stopwatch();
 
         socket.emit('question_stop');
     }
@@ -93,4 +137,7 @@
     <li class="question"><button onclick="e_QuestionStop()" class="StopButton">Stop Question</button></li>
     <li class="question" id="qactive"></li>
 </ul>
+<div id="Stopwatch" class="stopwatch">
+    00 : 00 : 000
+</div>
 {%endblock%}

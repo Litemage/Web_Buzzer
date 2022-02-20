@@ -1,6 +1,16 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, redirect, request
+import functools
 import os
 from flask_socketio import SocketIO
+
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect("login.html")
+    
+    return wrapped_view
 
 def create_app():
     # CONFIGURE APP
@@ -37,6 +47,7 @@ def create_app():
     def hello_world():
         return render_template('hello_world.html')
     
+
     @buzz.route('/buzzer')
     def buzzer():
         return render_template('buzzer.html')
@@ -44,6 +55,14 @@ def create_app():
     @buzz.route('/admin')
     def admin():
         return render_template('admin.html')
+
+    @buzz.route('/login', methods=('GET', 'POST'))
+    def login():
+        if request.method == 'GET':
+            return render_template('login.html')
+        elif request.method == 'POST':
+            # Take in username and put it in database
+            raise NotImplementedError
 
 
     return buzz
