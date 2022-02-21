@@ -1,0 +1,161 @@
+html {
+    background-color: rgb(29, 30, 34);
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+/*Thanks to W3 Schools for inspiration for the style for the majority of Header class objects*/
+
+ul.Header{
+    width: 100%;
+    background-color: rgb(63, 65, 73);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li.Header
+{
+    float: left;
+    padding: 16px;
+}
+
+#Username{
+    float: right;
+}
+
+/*Thanks to w3 schools for button style*/
+
+button.BuzzButtonActive
+ {
+    display: block;
+    width: 100%;
+    height: 60%;
+    border: none;
+    background-color: #83cc71;
+    padding: 40px 80px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.BuzzButtonActive:hover {
+    opacity: 1;
+}
+
+.BuzzButtonActive:active {
+    background-color: #5d7455;
+}
+
+button.BuzzButtonInactive
+ {
+    display: block;
+    width: 100%;
+    height: 60%;
+    border: none;
+    background-color: #e22e2e;
+    padding: 40px 80px;
+    font-size: 16px;
+    cursor: default;
+    text-align: center;
+}
+
+.StartButton{
+    display: block;
+    border: none;
+    background-color: #83cc71;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    padding: 13px;
+}
+.StartButton:hover {
+    opacity: 1;
+}
+
+.StartButton:active {
+    background-color: #75aa68;
+}
+
+.StopButton{
+    display: block;
+    border: none;
+    background-color: #e22e2e;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    padding: 13px;
+}
+.StopButton:hover {
+    background-color: #db5252;
+}
+
+.StopButton:active {
+    background-color: #af3939;
+}
+
+ul.question{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li.question{
+    float: left;
+    padding: 20px;
+}
+
+/* Thanks to W3 schools for this hr style and the input styles*/
+
+/* Overwrite default styles of hr */
+hr {
+    border: 1px solid #868484;
+    margin-bottom: 25px;
+  }
+
+/* Add padding to containers */
+.container {
+    padding: 18px;
+  }
+  
+  /* Full-width input fields */
+  input.Register {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: block;
+    width: 100%;
+    border: none;
+    background: rgb(114, 120, 141);
+    color: white;
+  }
+  
+  input:focus.Register {
+    background-color: rgb(125, 133, 165);
+    outline: none;
+  }
+
+  /* Set a style for the submit button */
+.registerbtn {
+    background-color: rgb(84, 88, 102);
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+  
+  .registerbtn:hover {
+    opacity: 1;
+  }
+
+.stopwatch{
+    font-size: xx-large;
+    margin-top: 18px;
+    text-align: center;
+}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{%block script%}
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+
+    var socket = io();
+
+    var question_active = false;
+
+    socket.on('question_active', function() {
+        console.log("[DEBUG] Admin - question active");
+        question_active = true;
+    });
+    
+    socket.on('server_question_stop', function() {
+        console.log("[DEBUG] Admin - question inactive");
+        question_active = false;
+    });
+
+    socket.on('question_active', function() {
+        document.getElementById("qactive").innerHTML = "Question Active";
+    });
+
+    // Credit to the "Foolish Developer" webpage for the stopwatch logic
+
+    var [milliseconds, seconds, minutes] = [0, 0, 0];
+
+    var int = null;
+
+    var questionTime = 0;
+
+    async function start_stopwatch(x) {
+        await new Promise(r => setTimeout(r, 400));
+        if (int!==null){
+            clearInterval(int);
+        }
+        int = setInterval(displayTimer, 10);
+        questionTime = x;
+    }
+
+    function pause_stopwatch(){
+        clearInterval(int);
+    }
+    
+    function reset_stopwatch(){
+        clearInterval(int);
+        questionTime = 0;
+        [milliseconds, seconds, minutes] = [0, 0, 0];
+        document.getElementById('Stopwatch').innerHTML = '00 : 000'
+    }
+
+    function displayTimer(){
+        milliseconds += 10;
+
+        if (milliseconds == 1000){
+            milliseconds = 0;
+            seconds++;
+            if (seconds == 60){
+                seconds = 0;
+                minutes++;
+            }
+        }
+        let s = seconds < 10 ? "0" + seconds : seconds;
+        let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+
+        if (seconds == questionTime){
+            document.getElementById('Stopwatch').innerHTML = ` ${s} : ${ms}`;
+            pause_stopwatch();
+            socket.emit('question_stop');
+            return;
+        }
+
+        document.getElementById('Stopwatch').innerHTML = ` ${s} : ${ms}`;
+    }
+
+
+    function e_QuestionStart() {
+        var qName = document.getElementById("qname").value;
+        var qTime = document.getElementById("qtime").value;
+
+        if (qTime > 120){
+            qTime = 120;
+        }
+
+        if (!qTime || !qName){
+            document.getElementById("qTimeLabel").style.color = "white";
+            document.getElementById("qNameLabel").style.color = "white";
+            if (!qTime){
+                document.getElementById("qTimeLabel").style.color = "red";
+            }
+            if (!qName){
+                document.getElementById("qNameLabel").style.color = "red";
+            }
+            return;
+        }
+        
+        document.getElementById("qNameLabel").style.color = "white";
+        document.getElementById("qTimeLabel").style.color = "white"
+
+        document.getElementById("qname").value = "";
+        document.getElementById("qtime").value = ""; 
+
+        socket.emit('queston_start', {"qname":qName, "qtime":qTime});
+        reset_stopwatch();
+        start_stopwatch(qTime);
+        console.log({"qname":qName, "qtime":qTime});
+    }
+
+    function e_QuestionStop() {
+        if (!question_active){
+            return;
+        }
+        document.getElementById("qname").value = "";
+        document.getElementById("qtime").value = ""; 
+
+        document.getElementById("qactive").innerHTML = "No Question Active";
+        reset_stopwatch();
+
+        socket.emit('question_stop');
+    }
+
+</script>
+{%endblock%}
+
+{%block title%}Administrator | Buzz-O-Matic{%endblock%}
+
+{%block header%}
+<ul class="Header">
+    <li class="Header">Admin | Buzz-O-Matic</li>
+    <li class="Header" id="Username">Admin | CHANGEME - username</li>
+</ul>
+{%endblock%}
+
+{%block content%}
+<h1 style="text-align: center;">Question Configure</h1>
+<ul class="question">
+    <li class="question"><form method="POST">
+            <label for="qname" id="qNameLabel">Question Name</label>
+            <input type="text" id="qname" name="qname"><br>
+            <label for="qtime" id="qTimeLabel">Question Time (Seconds)</label>
+            <input type="number" id="qtime" name="qtime" min="1" max="120">
+        </form></li>
+    <li class="question"><button id="_StartButton" class="StartButton"
+            onclick="e_QuestionStart()">Start Question</button></li>
+    <li class="question"><button onclick="e_QuestionStop()" class="StopButton">Stop Question</button></li>
+    <li class="question" id="qactive"></li>
+</ul>
+<div id="Stopwatch" class="stopwatch">
+    00 : 000
+</div>
+{%endblock%}
