@@ -53,6 +53,10 @@
     }
 
     function displayTimer(){
+        if (!question_active){
+            reset_stopwatch();
+            return;
+        }
         milliseconds += 10;
 
         if (milliseconds == 1000){

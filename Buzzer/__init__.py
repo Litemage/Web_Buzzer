@@ -36,7 +36,7 @@ def create_app():
     @socketio.on('queston_start')
     def handle_question_start(data):
         print('[DEBUG] Name: {0}, Time: {1}'.format(data['qname'], data['qtime']))
-        socketio.emit('question_active')
+        socketio.emit('question_active', data['qname'])
 
     @socketio.on('question_stop')
     def handle_question_stop():
