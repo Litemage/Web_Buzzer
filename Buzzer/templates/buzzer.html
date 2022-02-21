@@ -12,20 +12,26 @@
 
     var socket = io();
 
+    var questionActive = false;
+
     socket.on('question_active', function(qName) {
         document.getElementById('questionActiveLabel').innerHTML = qName + ' | Buzz!!!';
         enableClick();
+        questionActive = true;
     });
 
     socket.on('server_question_stop', function() {
         document.getElementById('questionActiveLabel').innerHTML = 'No Question Active';
         disableClick();
+        questionActive = false;
     });
 
     // todo PASS DATA HERE EVENTUALLY
     function e_stopQuestion(){
-        console.log("question stopped");
-        socket.emit('question_stop');
+        if (questionActive){
+            console.log("question stopped");
+            socket.emit('question_stop');
+        }
     }
 
     function disableClick(){
