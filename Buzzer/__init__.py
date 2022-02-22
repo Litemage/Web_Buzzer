@@ -88,9 +88,14 @@ def create_app():
         print('Going to render template')
         return render_template('buzzer.html', username=get_username())
 
-    @buzz.route('/admin')
-    def admin():
-        return render_template('admin.html')
+    @buzz.route('/admin/<int:key>')
+    def admin(key):
+        if key == 159:
+            return render_template('admin.html')
+        else:
+            return redirect('hello_world')
+        
+        
 
     #disable this route before release
     @buzz.route('/login', methods=('GET', 'POST'))
