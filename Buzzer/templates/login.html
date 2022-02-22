@@ -12,6 +12,7 @@
 {%endblock%}
 
 {%block content%}
+<h1>Login</h1>
 <hr>
 <form method="POST">
     <div class="container">
@@ -21,3 +22,15 @@
     </div>
 </form>
 {%endblock%}
+
+{% block flashes %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for m in messages %}
+                <li>{{ m }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+{% endblock %}

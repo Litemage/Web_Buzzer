@@ -12,20 +12,26 @@
 
     var socket = io();
 
+    var questionActive = false;
+
     socket.on('question_active', function(qName) {
         document.getElementById('questionActiveLabel').innerHTML = qName + ' | Buzz!!!';
         enableClick();
+        questionActive = true;
     });
 
     socket.on('server_question_stop', function() {
         document.getElementById('questionActiveLabel').innerHTML = 'No Question Active';
         disableClick();
+        questionActive = false;
     });
 
     // todo PASS DATA HERE EVENTUALLY
     function e_stopQuestion(){
-        console.log("question stopped");
-        socket.emit('question_stop');
+        if (questionActive){
+            console.log("question stopped");
+            socket.emit('question_stop');
+        }
     }
 
     function disableClick(){
@@ -42,13 +48,13 @@
 {%block header%}
 <ul class="Header">
     <li class="Header">Buzz-O-Matic</li>
-    <li class="Header" id="Username">CHANGEME - username</li>
+    <li class="Header" id="Username">{{ username }}</li>
 </ul>
 {%endblock%}
 
 {%block content%}
 <div style="padding: 10px;">
-    <h1 id="questionActiveLabel" style="text-align: center; margin: 0; padding: 0;">CHANGEME - question active?</h1>
+    <h1 id="questionActiveLabel" style="text-align: center; margin: 0; padding: 0;">No Question Active</h1>
 </div>
 <button onclick="e_stopQuestion()" id="buzzButton" type="button" class="BuzzButtonInactive">
     BUZZ IN
