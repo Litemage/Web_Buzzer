@@ -50,6 +50,13 @@ def create_app():
                 'SELECT * FROM users WHERE id = ?', (user_id,)
             ).fetchone()
 
+    def get_username():
+        user_id = session.get('user_id')
+        user = get_db().execute(
+            'SELECT * FROM users WHERE id = ?', (user_id,)
+        ).fetchone()
+        return user['username']
+
     # ================================== SOCKETS ==================================
 
     socketio = SocketIO(buzz)
@@ -79,12 +86,13 @@ def create_app():
     @login_required
     def buzzer():
         print('Going to render template')
-        return render_template('buzzer.html')
+        return render_template('buzzer.html', username=get_username())
 
     @buzz.route('/admin')
     def admin():
         return render_template('admin.html')
 
+    #disable this route before release
     @buzz.route('/login', methods=('GET', 'POST'))
     def login():     
         if request.method == 'POST':
@@ -103,7 +111,7 @@ def create_app():
                     )
                     db.commit()
                 except db.IntegrityError:
-                    error = f"User {username} already registered"
+                    error = f"User \"{username}\" already registered"
                     print("Username Already exists")
                 else:
                     user = db.execute(
