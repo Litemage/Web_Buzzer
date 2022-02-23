@@ -70,7 +70,7 @@ def create_app():
 
     @socketio.on('connect')
     def handle_connect(data):
-        print('[DEBUG] Client has connected')
+        print('[DEBUG] A Client has connected')
 
     @socketio.on('queston_start')
     def handle_question_start(data):
@@ -80,6 +80,18 @@ def create_app():
     @socketio.on('question_stop')
     def handle_question_stop():
         print('[DEBUG] Received question stop from admin')
+        socketio.emit('server_question_stop')
+
+    @socketio.on('question_answer')
+    def handle_question_answer():
+        user_id = session.get('user_id')
+        db = get_db()
+        user = db.execute(
+            'SELECT * FROM users WHERE id = ?',
+            (user_id,)
+        ).fetchone()
+        print(f"[DEBUG] User: {user['username']}")
+        socketio.emit('server_question_answer', user['username'])
         socketio.emit('server_question_stop')
     
     # ================================== ROUTES ==================================
@@ -96,7 +108,7 @@ def create_app():
         return render_template('buzzer.html', username=get_username())
 
     @buzz.route('/admin')
-    def admin(key):
+    def admin():
         return render_template('admin.html')
         
         
