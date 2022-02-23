@@ -26,11 +26,10 @@
         questionActive = false;
     });
 
-    // todo PASS DATA HERE EVENTUALLY
-    function e_stopQuestion(){
+    function e_sendAnswer(){
         if (questionActive){
-            console.log("question stopped");
-            socket.emit('question_stop');
+            socket.emit('question_answer');
+            console.log("answer sent");
         }
     }
 
@@ -56,7 +55,7 @@
 <div style="padding: 10px;">
     <h1 id="questionActiveLabel" style="text-align: center; margin: 0; padding: 0;">No Question Active</h1>
 </div>
-<button onclick="e_stopQuestion()" id="buzzButton" type="button" class="BuzzButtonInactive">
+<button onclick="e_sendAnswer()" id="buzzButton" type="button" class="BuzzButtonInactive">
     BUZZ IN
 </button>
 {%endblock%}
