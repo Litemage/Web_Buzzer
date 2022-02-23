@@ -19,6 +19,10 @@ def login_required(view):
     print(wrapped_view)
     return wrapped_view
 
+def page_not_found(e):
+    #set 404 explicitly
+    return render_template('404.html'), 404
+
 # ================================== CONFIG & INIT ==================================
 
 def create_app():
@@ -29,6 +33,9 @@ def create_app():
         SECRET_KEY = "Admin159",
         DATABASE = os.path.join(buzz.instance_path, "buzzer_system.sqlite")
     )
+
+    #Register Error handlers
+    buzz.register_error_handler(404, page_not_found)
 
     #init database
     init_app(buzz)
@@ -88,12 +95,9 @@ def create_app():
         print('Going to render template')
         return render_template('buzzer.html', username=get_username())
 
-    @buzz.route('/admin/<int:key>')
+    @buzz.route('/admin')
     def admin(key):
-        if key == 159:
-            return render_template('admin.html')
-        else:
-            return redirect('hello_world')
+        return render_template('admin.html')
         
         
 
