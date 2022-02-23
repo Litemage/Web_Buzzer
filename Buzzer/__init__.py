@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, flash, session, g
+from flask import Flask, render_template, url_for, redirect, request, flash, session, g, send_from_directory
 import functools
 import os
 from flask_socketio import SocketIO
@@ -99,6 +99,10 @@ def create_app():
     @buzz.route('/')
     def hello_world():
         return render_template('hello_world.html')
+
+    @buzz.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(os.path.join(buzz.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
     
 
     @buzz.route('/buzzer')
