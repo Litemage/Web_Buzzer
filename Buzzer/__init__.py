@@ -1,8 +1,10 @@
+from cgitb import html
 from flask import Flask, render_template, url_for, redirect, request, flash, session, g, send_from_directory
 import functools
 import os
 from flask_socketio import SocketIO
 from Buzzer.db import get_db, init_app
+from flask_minify import minify
 
 
 # ================================== HELPERS ==================================
@@ -36,6 +38,9 @@ def create_app():
 
     #Register Error handlers
     buzz.register_error_handler(404, page_not_found)
+
+    #Minify stuff
+    minify(app=buzz, html=True, js=True, cssless=True)
 
     #init database
     init_app(buzz)
