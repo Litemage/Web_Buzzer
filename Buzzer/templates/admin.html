@@ -22,9 +22,9 @@
         question_active = false;
     });
 
-    socket.on('server_question_answer', function(wUser){
+    socket.on('server_question_answer', function(userList){
         document.getElementById('winContainer').style.visibility = 'visible'
-        document.getElementById('winUser').innerHTML = wUser
+        document.getElementById('winUser').innerHTML = userList
     });
 
     // Credit to the "Foolish Developer" webpage for the stopwatch logic
