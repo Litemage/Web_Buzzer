@@ -6,7 +6,6 @@ from flask_socketio import SocketIO
 from Buzzer.db import get_db, init_app, insert_answer, insert_question, get_last_question
 from flask_minify import minify
 
-
 # ================================== HELPERS ==================================
 
 def login_required(view):
@@ -68,9 +67,6 @@ def create_app():
             'SELECT * FROM users WHERE id = ?', (user_id,)
         ).fetchone()
         return user['username']
-    # ================================== GLOBALS ==================================
-
-    global currentQuestion
 
     # ================================== SOCKETS ==================================
 
@@ -103,10 +99,10 @@ def create_app():
         # get last question
         lastQuestion = get_last_question()
         # insert a answer row into answers based off of last question
-        insert_answer(user_id, lastQuestion['id'])
+        insert_answer(user_id, lastQuestion)
 
         socketio.emit('server_question_answer', user['username'])
-        socketio.emit('server_question_stop')
+        # socketio.emit('server_question_stop')
     
     # ================================== ROUTES ==================================
 
@@ -159,8 +155,6 @@ def create_app():
                     ).fetchone()
                     session.clear()
                     session['user_id'] = user['id']
-                    print("[DEBUG] tried to redirect")
-                    print(redirect('buzzer'))
                     return redirect('buzzer')
             print(f'[DEBUG] error raised: {error}')
             flash(error)

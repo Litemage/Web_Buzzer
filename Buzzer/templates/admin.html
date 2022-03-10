@@ -10,6 +10,8 @@
 
     var question_active = false;
 
+    var winners = [];
+
     socket.on('question_active', function() {
         console.log("[DEBUG] Admin - question active");
         document.getElementById("qactive").innerHTML = "Question Active";
@@ -19,13 +21,26 @@
     socket.on('server_question_stop', function() {
         console.log("[DEBUG] Admin - question inactive");
         document.getElementById("qactive").innerHTML = "No Question Active";
+        console.log(winners.length);
+        if (!(winners.length <= 0)){
+            ShowWinners();
+        }
         question_active = false;
     });
 
-    socket.on('server_question_answer', function(userList){
-        document.getElementById('winContainer').style.visibility = 'visible'
-        document.getElementById('winUser').innerHTML = userList
+    socket.on('server_question_answer', function(username){
+        if (winners.includes(username)){
+            return;
+        }
+        winners.push(username)
     });
+
+    function ShowWinners(){
+        document.getElementById('winContainer').style.visibility = 'visible';
+        document.getElementById('winUser').innerText = winners.join("\n");
+        console.log(winners.join("\n"));
+        console.log(winners);
+    }
 
     // Credit to the "Foolish Developer" webpage for the stopwatch logic
 
@@ -87,6 +102,7 @@
     function e_QuestionStart() {
         var qName = document.getElementById("qname").value;
         var qTime = document.getElementById("qtime").value;
+        winners = [];
 
         document.getElementById('winContainer').style.visibility = 'hidden'
 
@@ -161,7 +177,7 @@
     00 : 00
 </div>
 <div style="visibility: hidden;" id="winContainer">
-    <h1 style="text-align: center;">First Buzz:</h1>
+    <h1 style="text-align: center;">Buzzez:</h1>
     <h2 style="text-align: center; font-weight: lighter;" id="winUser"></h2>
 </div>
 {%endblock%}

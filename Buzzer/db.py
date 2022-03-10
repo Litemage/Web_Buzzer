@@ -42,7 +42,6 @@ def init_db_command():
     click.echo('Database Initialized')
 
 # INSERTS QUESTION INTO TABLE
-# AS OF RIGHT NOW, THIS FUNCTION ISN'T USED
 def insert_question(qName):
     db = get_db()
     db.execute(
@@ -51,18 +50,40 @@ def insert_question(qName):
         (qName,)
     )
     db.commit()
-    lastId = db.execute(
-        "SELECT * FROM questions ORDER BY id DESC"
-    ).fetchone()
 
 def get_last_question():
     db = get_db()
 
-    lastQuestion = db.execute(
-        "SELECT * FROM questions ORDER BY id DESC LIMIT 1"
-    ).fetchone()
+    questions = db.execute(
+        "SELECT * FROM questions ORDER BY id DESC"
+    ).fetchall()
 
-    return lastQuestion
+    # basic greatest value algorithm
+    hightestId = 0
+    for q in questions:
+        if q["id"] > hightestId:
+            hightestId = q["id"]
+
+    print('[DEBUG] Hightest ID: {}'.format(hightestId))
+
+    return hightestId
+
+def get_question_id_by_name(qName):
+    db = get_db()
+    
+    questions = db.execute(
+        "SELECT * FROM questions ORDER BY id DESC"
+    ).fetchall()
+
+    selectedQuestion = None
+    for q in questions:
+        if q['question_name'] == qName:
+            selectedQuestion = q
+
+    if selectedQuestion == None:
+        return None
+
+    return selectedQuestion
 
 # AUTOMATICALLY INSERTS A USER ID FOR BUZZ IN TABLE BASED OFF LAST QUESTION
 def insert_answer(userId, qId):
