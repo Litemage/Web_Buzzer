@@ -2,8 +2,9 @@
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS answers;
 
-/*Create our table*/
+/*Create tables*/
 
 CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -11,8 +12,14 @@ CREATE TABLE users (
 );
 
 CREATE TABLE questions (
-  id INTEGER PRIMARY KEY,
-  question_name TEXT NOT NULL,
-  answer_id INTEGER,
-  FOREIGN KEY (answer_id) REFERENCES users (id)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  question_name TEXT NOT NULL
+);
+
+CREATE TABLE answers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  question_id INTEGER NOT NULL,
+  user INTEGER NOT NULL,
+  FOREIGN KEY (question_id) REFERENCES questions (id),
+  FOREIGN KEY (user) REFERENCES users (id)
 );

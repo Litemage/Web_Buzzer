@@ -42,31 +42,35 @@ def init_db_command():
     click.echo('Database Initialized')
 
 # INSERTS QUESTION INTO TABLE
+# AS OF RIGHT NOW, THIS FUNCTION ISN'T USED
 def insert_question(qName):
     db = get_db()
-    error = None
-
-    lastID = db.execute(
-        "SELECT * FROM question ORDER BY id DESC LIMIT 1"
-    )
-
     db.execute(
-        "INSERT INTO questions (id, question_name, answer_id)"
-        " VALUES (?, ?, ?)",
-        (lastID+1, qName, None)
+        "INSERT INTO questions (question_name)"
+        " VALUES (?)",
+        (qName,)
     )
+    db.commit()
+    lastId = db.execute(
+        "SELECT * FROM questions ORDER BY id DESC"
+    ).fetchone()
+
+def get_last_question():
+    db = get_db()
+
+    lastQuestion = db.execute(
+        "SELECT * FROM questions ORDER BY id DESC LIMIT 1"
+    ).fetchone()
+
+    return lastQuestion
 
 # AUTOMATICALLY INSERTS A USER ID FOR BUZZ IN TABLE BASED OFF LAST QUESTION
-def insert_question_buzz(userId, qName):
+def insert_answer(userId, qId):
     db = get_db()
-    error = None
-
-    lastID = db.execute(
-        "SELECT * FROM question ORDER BY id DESC LIMIT 1"
-    )
 
     db.execute(
-        "INSERT INTO questions (id, question_name, answer_id)"
-        " VALUES (?, ?, ?)",
-        (lastID, qName, userId)
+        "INSERT INTO answers (question_id, user)"
+        " VALUES (?, ?)",
+        (qId, userId,)
     )
+    db.commit()

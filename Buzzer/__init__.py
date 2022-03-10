@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, redirect, request, flash, ses
 import functools
 import os
 from flask_socketio import SocketIO
-from Buzzer.db import get_db, init_app
+from Buzzer.db import get_db, init_app, insert_answer, insert_question, get_last_question
 from flask_minify import minify
 
 
@@ -68,6 +68,9 @@ def create_app():
             'SELECT * FROM users WHERE id = ?', (user_id,)
         ).fetchone()
         return user['username']
+    # ================================== GLOBALS ==================================
+
+    global currentQuestion
 
     # ================================== SOCKETS ==================================
 
@@ -79,7 +82,8 @@ def create_app():
 
     @socketio.on('queston_start')
     def handle_question_start(data):
-        print('[DEBUG] Name: {0}, Time: {1}'.format(data['qname'], data['qtime']))
+        db = get_db()
+        insert_question(data['qname'])
         socketio.emit('question_active', data['qname'])
 
     @socketio.on('question_stop')
@@ -95,7 +99,12 @@ def create_app():
             'SELECT * FROM users WHERE id = ?',
             (user_id,)
         ).fetchone()
-        print(f"[DEBUG] User: {user['username']}")
+
+        # get last question
+        lastQuestion = get_last_question()
+        # insert a answer row into answers based off of last question
+        insert_answer(user_id, lastQuestion['id'])
+
         socketio.emit('server_question_answer', user['username'])
         socketio.emit('server_question_stop')
     

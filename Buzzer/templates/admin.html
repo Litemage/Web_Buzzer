@@ -65,10 +65,10 @@
         if (milliseconds == 1000){
             milliseconds = 0;
             seconds++;
-            if (seconds == 60){
-                seconds = 0;
-                minutes++;
-            }
+            //if (seconds == 60){
+            //    seconds = 0;
+            //    minutes++;
+            //}
         }
         let s = seconds < 10 ? "0" + seconds : seconds;
         let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
@@ -158,7 +158,7 @@
     <li class="question" id="qactive">No Question Active</li>
 </ul>
 <div id="Stopwatch" class="stopwatch">
-    00 : 000
+    00 : 00
 </div>
 <div style="visibility: hidden;" id="winContainer">
     <h1 style="text-align: center;">First Buzz:</h1>
