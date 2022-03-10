@@ -12,12 +12,9 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            print('[DEBUG] user is none')
             return redirect("login")
         return view(**kwargs)
 
-    print('[DEBUG] returning wrapped_view')
-    print(wrapped_view)
     return wrapped_view
 
 def page_not_found(e):
@@ -71,11 +68,7 @@ def create_app():
     # ================================== SOCKETS ==================================
 
     socketio = SocketIO(buzz)
-
-    @socketio.on('connect')
-    def handle_connect(data):
-        print('[DEBUG] A Client has connected')
-
+    
     @socketio.on('queston_start')
     def handle_question_start(data):
         db = get_db()
@@ -84,7 +77,6 @@ def create_app():
 
     @socketio.on('question_stop')
     def handle_question_stop():
-        print('[DEBUG] Received question stop from admin')
         socketio.emit('server_question_stop')
 
     @socketio.on('question_answer')
@@ -118,7 +110,6 @@ def create_app():
     @buzz.route('/buzzer')
     @login_required
     def buzzer():
-        print('Going to render template')
         return render_template('buzzer.html', username=get_username())
 
     @buzz.route('/admin')
@@ -147,7 +138,6 @@ def create_app():
                     db.commit()
                 except db.IntegrityError:
                     error = f"User \"{username}\" already registered"
-                    print("Username Already exists")
                 else:
                     user = db.execute(
                         'SELECT * FROM users WHERE username = ?',
@@ -156,7 +146,6 @@ def create_app():
                     session.clear()
                     session['user_id'] = user['id']
                     return redirect('buzzer')
-            print(f'[DEBUG] error raised: {error}')
             flash(error)
             
         return render_template('login.html')

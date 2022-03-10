@@ -13,15 +13,12 @@
     var winners = [];
 
     socket.on('question_active', function() {
-        console.log("[DEBUG] Admin - question active");
         document.getElementById("qactive").innerHTML = "Question Active";
         question_active = true;
     });
     
     socket.on('server_question_stop', function() {
-        console.log("[DEBUG] Admin - question inactive");
         document.getElementById("qactive").innerHTML = "No Question Active";
-        console.log(winners.length);
         if (!(winners.length <= 0)){
             ShowWinners();
         }
@@ -38,8 +35,6 @@
     function ShowWinners(){
         document.getElementById('winContainer').style.visibility = 'visible';
         document.getElementById('winUser').innerText = winners.join("\n");
-        console.log(winners.join("\n"));
-        console.log(winners);
     }
 
     // Credit to the "Foolish Developer" webpage for the stopwatch logic
@@ -131,7 +126,6 @@
         socket.emit('queston_start', {"qname":qName, "qtime":qTime});
         reset_stopwatch();
         start_stopwatch(qTime);
-        console.log({"qname":qName, "qtime":qTime});
     }
 
     function e_QuestionStop() {

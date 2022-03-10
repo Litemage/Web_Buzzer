@@ -64,8 +64,6 @@ def get_last_question():
         if q["id"] > hightestId:
             hightestId = q["id"]
 
-    print('[DEBUG] Hightest ID: {}'.format(hightestId))
-
     return hightestId
 
 def get_question_id_by_name(qName):

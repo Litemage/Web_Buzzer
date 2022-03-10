@@ -29,7 +29,6 @@
     function e_sendAnswer(){
         if (questionActive){
             socket.emit('question_answer');
-            console.log("answer sent");
         }
         disableClick();
     }
