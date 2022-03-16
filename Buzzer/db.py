@@ -44,29 +44,52 @@ def init_db_command():
 # INSERTS QUESTION INTO TABLE
 def insert_question(qName):
     db = get_db()
-    error = None
-
-    lastID = db.execute(
-        "SELECT * FROM question ORDER BY id DESC LIMIT 1"
-    )
-
     db.execute(
-        "INSERT INTO questions (id, question_name, answer_id)"
-        " VALUES (?, ?, ?)",
-        (lastID+1, qName, None)
+        "INSERT INTO questions (question_name)"
+        " VALUES (?)",
+        (qName,)
     )
+    db.commit()
+
+def get_last_question():
+    db = get_db()
+
+    questions = db.execute(
+        "SELECT * FROM questions ORDER BY id DESC"
+    ).fetchall()
+
+    # basic greatest value algorithm
+    hightestId = 0
+    for q in questions:
+        if q["id"] > hightestId:
+            hightestId = q["id"]
+
+    return hightestId
+
+def get_question_id_by_name(qName):
+    db = get_db()
+    
+    questions = db.execute(
+        "SELECT * FROM questions ORDER BY id DESC"
+    ).fetchall()
+
+    selectedQuestion = None
+    for q in questions:
+        if q['question_name'] == qName:
+            selectedQuestion = q
+
+    if selectedQuestion == None:
+        return None
+
+    return selectedQuestion
 
 # AUTOMATICALLY INSERTS A USER ID FOR BUZZ IN TABLE BASED OFF LAST QUESTION
-def insert_question_buzz(userId, qName):
+def insert_answer(userId, qId):
     db = get_db()
-    error = None
-
-    lastID = db.execute(
-        "SELECT * FROM question ORDER BY id DESC LIMIT 1"
-    )
 
     db.execute(
-        "INSERT INTO questions (id, question_name, answer_id)"
-        " VALUES (?, ?, ?)",
-        (lastID, qName, userId)
+        "INSERT INTO answers (question_id, user)"
+        " VALUES (?, ?)",
+        (qId, userId,)
     )
+    db.commit()

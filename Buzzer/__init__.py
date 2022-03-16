@@ -3,9 +3,8 @@ from flask import Flask, render_template, url_for, redirect, request, flash, ses
 import functools
 import os
 from flask_socketio import SocketIO
-from Buzzer.db import get_db, init_app
+from Buzzer.db import get_db, init_app, insert_answer, insert_question, get_last_question
 from flask_minify import minify
-
 
 # ================================== HELPERS ==================================
 
@@ -13,12 +12,9 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            print('[DEBUG] user is none')
             return redirect("login")
         return view(**kwargs)
 
-    print('[DEBUG] returning wrapped_view')
-    print(wrapped_view)
     return wrapped_view
 
 def page_not_found(e):
@@ -72,19 +68,15 @@ def create_app():
     # ================================== SOCKETS ==================================
 
     socketio = SocketIO(buzz)
-
-    @socketio.on('connect')
-    def handle_connect(data):
-        print('[DEBUG] A Client has connected')
-
+    
     @socketio.on('queston_start')
     def handle_question_start(data):
-        print('[DEBUG] Name: {0}, Time: {1}'.format(data['qname'], data['qtime']))
+        db = get_db()
+        insert_question(data['qname'])
         socketio.emit('question_active', data['qname'])
 
     @socketio.on('question_stop')
     def handle_question_stop():
-        print('[DEBUG] Received question stop from admin')
         socketio.emit('server_question_stop')
 
     @socketio.on('question_answer')
@@ -95,9 +87,14 @@ def create_app():
             'SELECT * FROM users WHERE id = ?',
             (user_id,)
         ).fetchone()
-        print(f"[DEBUG] User: {user['username']}")
+
+        # get last question
+        lastQuestion = get_last_question()
+        # insert a answer row into answers based off of last question
+        insert_answer(user_id, lastQuestion)
+
         socketio.emit('server_question_answer', user['username'])
-        socketio.emit('server_question_stop')
+        # socketio.emit('server_question_stop')
     
     # ================================== ROUTES ==================================
 
@@ -113,7 +110,6 @@ def create_app():
     @buzz.route('/buzzer')
     @login_required
     def buzzer():
-        print('Going to render template')
         return render_template('buzzer.html', username=get_username())
 
     @buzz.route('/admin')
@@ -142,7 +138,6 @@ def create_app():
                     db.commit()
                 except db.IntegrityError:
                     error = f"User \"{username}\" already registered"
-                    print("Username Already exists")
                 else:
                     user = db.execute(
                         'SELECT * FROM users WHERE username = ?',
@@ -150,10 +145,7 @@ def create_app():
                     ).fetchone()
                     session.clear()
                     session['user_id'] = user['id']
-                    print("[DEBUG] tried to redirect")
-                    print(redirect('buzzer'))
                     return redirect('buzzer')
-            print(f'[DEBUG] error raised: {error}')
             flash(error)
             
         return render_template('login.html')
