@@ -97,7 +97,6 @@
     function e_QuestionStart() {
         var qName = document.getElementById("qname").value;
         var qTime = document.getElementById("qtime").value;
-        winners = [];
 
         document.getElementById('winContainer').style.visibility = 'hidden'
 
@@ -123,6 +122,7 @@
         document.getElementById("qname").value = "";
         document.getElementById("qtime").value = ""; 
 
+        winners = [];
         socket.emit('queston_start', {"qname":qName, "qtime":qTime});
         reset_stopwatch();
         start_stopwatch(qTime);
