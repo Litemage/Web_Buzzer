@@ -64,7 +64,22 @@ def get_last_question():
         if q["id"] > hightestId:
             hightestId = q["id"]
 
-    return hightestId
+    return get_question_by_id(hightestId)
+
+def get_question_by_id(id):
+    db = get_db()
+
+    questions = db.execute(
+        "SELECT * FROM questions ORDER BY id DESC"
+    ).fetchall()
+
+    selectedQuestion = None
+    for q in questions:
+        if q["id"] == id:
+            selectedQuestion = q
+            
+    return selectedQuestion
+
 
 def get_question_id_by_name(qName):
     db = get_db()
@@ -84,12 +99,12 @@ def get_question_id_by_name(qName):
     return selectedQuestion
 
 # AUTOMATICALLY INSERTS A USER ID FOR BUZZ IN TABLE BASED OFF LAST QUESTION
-def insert_answer(userId, qId):
+def insert_answer(userId, question):
     db = get_db()
 
     db.execute(
         "INSERT INTO answers (question_id, user)"
         " VALUES (?, ?)",
-        (qId, userId,)
+        (question["id"], userId,)
     )
     db.commit()
