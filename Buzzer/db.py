@@ -77,6 +77,9 @@ def get_question_by_id(id):
     for q in questions:
         if q["id"] == id:
             selectedQuestion = q
+
+    if selectedQuestion == None:
+        return -1
             
     return selectedQuestion
 
