@@ -1,4 +1,3 @@
-from cgitb import html
 from flask import Flask, render_template, url_for, redirect, request, flash, session, g, send_from_directory
 import functools
 import os
